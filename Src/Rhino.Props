@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- This file should be included in every csproj that requires rhino common -->
+  <!-- e.g. <Import Project="$(SolutionDir)\Src\Rhino.props" /> -->
+
+  <!-- reference to Rhino common v7+ -->
+  <ItemGroup>
+    <Reference Include="RhinoCommon">
+       <HintPath>C:\Program Files\Rhino WIP\System\RhinoCommon.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  
+</Project>
