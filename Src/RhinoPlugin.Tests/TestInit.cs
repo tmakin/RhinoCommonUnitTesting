@@ -61,16 +61,8 @@ namespace RhinoPluginTests
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
+            // Shotdown the rhino process at the end of the test run
             ExitInProcess();
-        }
-
-
-        /// <summary>
-        /// Add rhino common to path
-        /// </summary>
-        public static void Init()
-        {
-
         }
 
         [DllImport("RhinoLibrary.dll")]
