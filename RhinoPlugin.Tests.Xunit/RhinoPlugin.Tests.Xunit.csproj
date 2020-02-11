@@ -43,7 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="XunitTestInit.cs" />
+    <Compile Include="XunitExampleTests.cs" />
+    <Compile Include="XunitTestInitFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
