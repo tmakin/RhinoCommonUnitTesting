@@ -14,6 +14,7 @@ namespace RhinoPluginTests
     {
         static bool initialized = false;
         static string systemDir = null;
+        static string systemDirOld = null;
 
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext context)
@@ -32,7 +33,14 @@ namespace RhinoPluginTests
             // Set path to rhino system directory
             string envPath = Environment.GetEnvironmentVariable("path");
             string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            systemDir = System.IO.Path.Combine(programFiles, "Rhino WIP", "System");
+            systemDir = System.IO.Path.Combine(programFiles, "Rhino 7 WIP", "System");
+            systemDirOld = System.IO.Path.Combine(programFiles, "Rhino WIP", "System");
+            if (System.IO.Directory.Exists(systemDir) != true)
+            {
+                systemDir = systemDirOld;
+            }
+
+
             Assert.IsTrue(System.IO.Directory.Exists(systemDir), "Rhino system dir not found: {0}", systemDir);
 
             // Add rhino system directory to path (for RhinoLibrary.dll)
