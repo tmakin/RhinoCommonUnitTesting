@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RhinoPlugin.Tests.Xunit", "RhinoPlugin.Tests.Xunit\RhinoPlugin.Tests.Xunit.csproj", "{12A58A6F-A98D-44B7-946F-78E46FCAE6C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RhinoPlugin.Tests.Xunit", "Src\RhinoPlugin.Tests.Xunit\RhinoPlugin.Tests.Xunit.csproj", "{12A58A6F-A98D-44B7-946F-78E46FCAE6C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
