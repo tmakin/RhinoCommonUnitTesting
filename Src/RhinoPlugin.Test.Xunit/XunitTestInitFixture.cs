@@ -1,34 +1,35 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RhinoPluginTests
+using Xunit;
+
+
+namespace RhinoPlugin.Tests.Xunit
 {
-    [TestClass]
-    public static class TestInit
+    /// <summary>
+    /// Initialization process for Rhino and  shared Test Context adapted to xunit from here https://github.com/tmakin/RhinoCommonUnitTesting
+    /// </summary>
+    public class XunitTestInitFixture : IDisposable
     {
         static bool initialized = false;
         static string systemDir = null;
         static string systemDirOld = null;
 
-        [AssemblyInitialize]
-        public static void AssemblyInitialize(TestContext context)
+
+
+        public XunitTestInitFixture()
         {
+            ////Check if the fixture is already initialised
             if (initialized)
             {
                 throw new InvalidOperationException("AssemblyInitialize should only be called once");
             }
             initialized = true;
 
-            context.WriteLine("Assembly init started");
+            // Make surte we are running the tests as 64x
+            Assert.True(Environment.Is64BitProcess, "Tests must be run as x64");
 
-            // Ensure we are 64 bit
-            Assert.IsTrue(Environment.Is64BitProcess, "Tests must be run as x64");
 
             // Set path to rhino system directory
             string envPath = Environment.GetEnvironmentVariable("path");
@@ -40,9 +41,7 @@ namespace RhinoPluginTests
                 systemDir = systemDirOld;
             }
 
-
-            Assert.IsTrue(System.IO.Directory.Exists(systemDir), "Rhino system dir not found: {0}", systemDir);
-
+            Assert.True(System.IO.Directory.Exists(systemDir), string.Format("Rhino system dir not found: {0}", systemDir));
             // Add rhino system directory to path (for RhinoLibrary.dll)
             Environment.SetEnvironmentVariable("path", envPath + ";" + systemDir);
 
@@ -66,11 +65,11 @@ namespace RhinoPluginTests
             return Assembly.LoadFrom(path);
         }
 
-        [AssemblyCleanup]
-        public static void AssemblyCleanup()
+        public void Dispose()
         {
-            // Shotdown the rhino process at the end of the test run
+            //Cleaning up
             ExitInProcess();
+            //initialized = false;
         }
 
         [DllImport("RhinoLibrary.dll")]
@@ -78,5 +77,16 @@ namespace RhinoPluginTests
 
         [DllImport("RhinoLibrary.dll")]
         internal static extern int ExitInProcess();
+    }
+
+    /// <summary>
+    /// Collection Fixture
+    /// </summary>
+    [CollectionDefinition("Rhino Collection")]
+    public class RhinoCollection : ICollectionFixture<XunitTestInitFixture>
+    {
+        // This class has no code, and is never created. Its purpose is simply
+        // to be the place to apply [CollectionDefinition] and all the
+        // ICollectionFixture<> interfaces.
     }
 }
