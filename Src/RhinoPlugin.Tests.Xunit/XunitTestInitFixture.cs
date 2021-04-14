@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 
+
+
 using Xunit;
 
 
@@ -20,6 +22,7 @@ namespace RhinoPlugin.Tests.Xunit
 
         public XunitTestInitFixture()
         {
+
             ////Check if the fixture is already initialised
             if (initialized)
             {
