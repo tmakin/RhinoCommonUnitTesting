@@ -1,17 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 using RhinoInside;
 using Microsoft.Win32;
 
 namespace RhinoPluginTests
 {
+    /// <summary>
+    /// Shared VS test assembly class using Rhino.Inside
+    /// </summary>
     [TestClass]
     public static class TestInit
     {
@@ -30,15 +27,12 @@ namespace RhinoPluginTests
             {
                 throw new InvalidOperationException("Initialize Rhino.Inside once");
             }
-            else
-            {
-                Resolver.Initialize();
-                initialized = true;
-            }
-            
+            RhinoInside.Resolver.Initialize();
+            initialized = true;
+
             context.WriteLine("Rhino.Inside init has started");
 
-            // Ensure we are running the test in x64
+            // Ensure we are running the tests in x64
             Assert.IsTrue(Environment.Is64BitProcess, "Tests must be run as x64");
 
             // Set path to rhino system directory
@@ -47,11 +41,9 @@ namespace RhinoPluginTests
 
             // Start a headless rhino instance using Rhino.Inside
             var _rhinoCore = new Rhino.Runtime.InProcess.RhinoCore(null, Rhino.Runtime.InProcess.WindowStyle.NoWindow);
-
-            _rhinoCore.Dispose();
         }
 
-
+        
 
     }
 }

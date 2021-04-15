@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Types;
 namespace RhinoPluginTests
 {
     /// <summary>
-    /// Example test methods that invoke RhinoCommon
+    /// Example test methods that invoke RhinoCommon and Grasshopper
     /// </summary>
     [TestClass]
     public class ExampleTests
