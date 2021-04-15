@@ -1,55 +1,75 @@
-﻿using System;
+﻿//#define RHINOINSIDE
+
+using Microsoft.Win32;
+using System;
+using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
 using Xunit;
 
 
+
 namespace RhinoPlugin.Tests.Xunit
 {
     /// <summary>
-    /// Initialization process for Rhino and  shared Test Context adapted to xunit from here https://github.com/tmakin/RhinoCommonUnitTesting
+    /// Shared Xunit test context using a manual load of assemblies WIP using Rhino.Inside
     /// </summary>
     public class XunitTestInitFixture : IDisposable
     {
         static bool initialized = false;
-        static string systemDir = null;
-        static string systemDirOld = null;
+        static string rhinoDir;
+#if RHINOINSIDE
+            Rhino.Runtime.InProcess.RhinoCore _rhinoCore;
+#endif
 
-
-
+        
         public XunitTestInitFixture()
         {
-            ////Check if the fixture is already initialised
+            rhinoDir = Registry.GetValue(@"HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\7.0\Install", "Path", null) as string ?? string.Empty;
+
+            Assert.True(System.IO.Directory.Exists(rhinoDir), String.Format("Rhino system dir not found: {0}", rhinoDir));
+
+            //Check if the fixture is already initialised
             if (initialized)
             {
                 throw new InvalidOperationException("AssemblyInitialize should only be called once");
             }
+#if RHINOINSIDE
+            RhinoInside.Resolver.Initialize();
+#endif
             initialized = true;
 
-            // Make surte we are running the tests as 64x
+            // Make sure we are running the tests as 64x
             Assert.True(Environment.Is64BitProcess, "Tests must be run as x64");
 
-
-            // Set path to rhino system directory
+            // Add rhino system directory to path
             string envPath = Environment.GetEnvironmentVariable("path");
-            string programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
-            systemDir = System.IO.Path.Combine(programFiles, "Rhino 7 WIP", "System");
-            systemDirOld = System.IO.Path.Combine(programFiles, "Rhino WIP", "System");
-            if (System.IO.Directory.Exists(systemDir) != true)
-            {
-                systemDir = systemDirOld;
-            }
-
-            Assert.True(System.IO.Directory.Exists(systemDir), string.Format("Rhino system dir not found: {0}", systemDir));
-            // Add rhino system directory to path (for RhinoLibrary.dll)
-            Environment.SetEnvironmentVariable("path", envPath + ";" + systemDir);
-
-            // Add hook for .Net assmbly resolve (for RhinoCommmon.dll)
+            Environment.SetEnvironmentVariable("path", envPath + ";" + rhinoDir);
+#if !RHINOINSIDE
+            // Add hook for .Net assembly resolve (for RhinoCommmon.dll)
             AppDomain.CurrentDomain.AssemblyResolve += ResolveRhinoCommon;
-
+            // If you want to run GH related tests
+            // Add hook for .Net assembly resolve (for Grasshopper.dll)
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveGrasshopper;
+#endif
             // Start headless Rhino process
+#if RHINOINSIDE
+            _rhinoCore = new Rhino.Runtime.InProcess.RhinoCore(null, Rhino.Runtime.InProcess.WindowStyle.Hidden);
+#elif !RHINOINSIDE
             LaunchInProcess(0, 0);
+#endif
+        }
+
+        public void Dispose()
+        {
+#if RHINOINSIDE
+            _rhinoCore?.Dispose();
+            _rhinoCore = null;
+#elif !RHINOINSIDE
+            ExitInProcess();
+#endif
+
         }
 
         private static Assembly ResolveRhinoCommon(object sender, ResolveEventArgs args)
@@ -61,15 +81,21 @@ namespace RhinoPlugin.Tests.Xunit
                 return null;
             }
 
-            var path = System.IO.Path.Combine(systemDir, "RhinoCommon.dll");
+            var path = System.IO.Path.Combine(rhinoDir, "RhinoCommon.dll");
             return Assembly.LoadFrom(path);
         }
 
-        public void Dispose()
+        private static Assembly ResolveGrasshopper(object sender, ResolveEventArgs args)
         {
-            //Cleaning up
-            ExitInProcess();
-            //initialized = false;
+            var name = args.Name;
+
+            if (!name.StartsWith("Grasshopper"))
+            {
+                return null;
+            }
+
+            var path = System.IO.Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\Grasshopper.dll");
+            return Assembly.LoadFrom(path);
         }
 
         [DllImport("RhinoLibrary.dll")]
@@ -77,16 +103,20 @@ namespace RhinoPlugin.Tests.Xunit
 
         [DllImport("RhinoLibrary.dll")]
         internal static extern int ExitInProcess();
+
     }
+
 
     /// <summary>
     /// Collection Fixture
     /// </summary>
-    [CollectionDefinition("Rhino Collection")]
+    [CollectionDefinition("Rhino Testing Collection")]
     public class RhinoCollection : ICollectionFixture<XunitTestInitFixture>
     {
         // This class has no code, and is never created. Its purpose is simply
         // to be the place to apply [CollectionDefinition] and all the
         // ICollectionFixture<> interfaces.
     }
+
 }
+
