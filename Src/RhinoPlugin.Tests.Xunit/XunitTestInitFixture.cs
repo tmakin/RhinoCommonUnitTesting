@@ -47,11 +47,10 @@ namespace RhinoPlugin.Tests.Xunit
             string envPath = Environment.GetEnvironmentVariable("path");
             Environment.SetEnvironmentVariable("path", envPath + ";" + rhinoDir);
 #if !RHINOINSIDE
-            // Add hook for .Net assembly resolve (for RhinoCommmon.dll)
-            AppDomain.CurrentDomain.AssemblyResolve += ResolveRhinoCommon;
-            // If you want to run GH related tests
-            // Add hook for .Net assembly resolve (for Grasshopper.dll)
-            AppDomain.CurrentDomain.AssemblyResolve += ResolveGrasshopper;
+            // Add hook for .Net assembly resolve (for RhinoCommmon.dll and Grasshopper3d.dll)
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveRhinoAssemblies;
+
+
 #endif
             // Start headless Rhino process
 #if RHINOINSIDE
@@ -72,30 +71,25 @@ namespace RhinoPlugin.Tests.Xunit
 
         }
 
-        private static Assembly ResolveRhinoCommon(object sender, ResolveEventArgs args)
+        private static Assembly ResolveRhinoAssemblies(object sender, ResolveEventArgs args)
         {
             var name = args.Name;
 
-            if (!name.StartsWith("RhinoCommon"))
+            if (name.StartsWith("RhinoCommon"))
+            {
+                var path = System.IO.Path.Combine(rhinoDir, "RhinoCommon.dll");
+                return Assembly.LoadFrom(path);
+            }
+           else if (name.StartsWith("Grasshopper"))
+            {
+                var path = System.IO.Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\Grasshopper.dll");
+                return Assembly.LoadFrom(path);
+            }
+            else
             {
                 return null;
             }
 
-            var path = System.IO.Path.Combine(rhinoDir, "RhinoCommon.dll");
-            return Assembly.LoadFrom(path);
-        }
-
-        private static Assembly ResolveGrasshopper(object sender, ResolveEventArgs args)
-        {
-            var name = args.Name;
-
-            if (!name.StartsWith("Grasshopper"))
-            {
-                return null;
-            }
-
-            var path = System.IO.Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\Grasshopper.dll");
-            return Assembly.LoadFrom(path);
         }
 
         [DllImport("RhinoLibrary.dll")]
