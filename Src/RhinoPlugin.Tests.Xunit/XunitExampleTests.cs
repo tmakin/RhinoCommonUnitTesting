@@ -1,22 +1,26 @@
 ﻿using System;
 
 using Rhino.Geometry;
-using Grasshopper;
 using Grasshopper.Kernel.Types;
-
 
 using Xunit;
 
 
 namespace RhinoPlugin.Tests.Xunit
 {
-    [Collection("Rhino Collection")]
-    public class XunitExampleTests
+    /// <summary>
+    /// XUnit tests
+    /// </summary>
+    [Collection("Rhino Testing Collection")]
+    public class XunitExampleTests 
     {
+        XunitTestInitFixture fixture;
 
-        /// <summary>
-        /// Xunit Test to Transform a brep using a translation
-        /// </summary>
+        public XunitExampleTests(XunitTestInitFixture _fixture)
+        {
+            _fixture = fixture;
+        }
+       
         [Fact]
         public void Brep_Translation()
         {
