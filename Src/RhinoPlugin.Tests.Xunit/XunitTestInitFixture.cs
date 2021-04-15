@@ -1,4 +1,4 @@
-﻿#define RHINOINSIDE
+﻿//#define RHINOINSIDE
 
 using Microsoft.Win32;
 using System;
