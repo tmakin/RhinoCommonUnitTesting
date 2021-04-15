@@ -38,15 +38,17 @@ namespace RhinoPluginTests
             
             context.WriteLine("Rhino.Inside init has started");
 
-            // Ensure we are 64 bit
+            // Ensure we are running the test in x64
             Assert.IsTrue(Environment.Is64BitProcess, "Tests must be run as x64");
 
             // Set path to rhino system directory
             string envPath = Environment.GetEnvironmentVariable("path");
             Environment.SetEnvironmentVariable("path", envPath + ";" + rhinoDir);
 
-            // Starta headless rhino instance using Rhino.Inside
+            // Start a headless rhino instance using Rhino.Inside
             var _rhinoCore = new Rhino.Runtime.InProcess.RhinoCore(null, Rhino.Runtime.InProcess.WindowStyle.NoWindow);
+
+            _rhinoCore.Dispose();
         }
 
 
