@@ -40,10 +40,14 @@ namespace RhinoPluginTests
             Environment.SetEnvironmentVariable("path", envPath + ";" + rhinoDir);
 
             // Start a headless rhino instance using Rhino.Inside
-            var _rhinoCore = new Rhino.Runtime.InProcess.RhinoCore(null, Rhino.Runtime.InProcess.WindowStyle.NoWindow);
+            StartRhino();
         }
 
-        
 
+        [STAThread]
+        public static void StartRhino()
+        {
+            var _rhinoCore = new Rhino.Runtime.InProcess.RhinoCore(null, Rhino.Runtime.InProcess.WindowStyle.NoWindow);
+        }
     }
 }

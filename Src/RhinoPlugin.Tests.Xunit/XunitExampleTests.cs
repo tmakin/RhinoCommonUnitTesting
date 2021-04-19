@@ -11,29 +11,32 @@ namespace RhinoPlugin.Tests.Xunit
     /// <summary>
     /// XUnit tests
     /// </summary>
-    [Collection("Rhino Testing Collection")]
+    [Collection("RhinoTestingCollection")]
     public class XunitExampleTests 
     {
-        XunitTestInitFixture fixture;
+        XunitTestFixture _fixture;
 
-        public XunitExampleTests(XunitTestInitFixture _fixture)
+        public XunitExampleTests(XunitTestFixture fixture)
         {
-            _fixture = fixture;
+           fixture = _fixture;
         }
        
         [Fact]
         public void Brep_Translation()
         {
-            // Arrange
-            var bb = new BoundingBox(new Point3d(0, 0, 0), new Point3d(100, 100, 100));
-            var brep = bb.ToBrep();
-            var t = Transform.Translation(new Vector3d(30, 40, 50));
 
-            // Act
-            brep.Transform(t);
+                // Arrange
+                var bb = new BoundingBox(new Point3d(0, 0, 0), new Point3d(100, 100, 100));
+                var brep = bb.ToBrep();
+                var t = Transform.Translation(new Vector3d(30, 40, 50));
 
-            // Assert
-            Assert.Equal(brep.GetBoundingBox(true).Center, new Point3d(80, 90, 100));
+                // Act
+                brep.Transform(t);
+
+                // Assert
+                Assert.Equal(brep.GetBoundingBox(true).Center, new Point3d(80, 90, 100));
+            
+            
         }
 
         /// <summary>
