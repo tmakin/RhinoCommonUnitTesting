@@ -35,8 +35,7 @@ namespace RhinoPlugin.Tests.Xunit
 
                 // Assert
                 Assert.Equal(brep.GetBoundingBox(true).Center, new Point3d(80, 90, 100));
-            
-            
+  
         }
 
         /// <summary>

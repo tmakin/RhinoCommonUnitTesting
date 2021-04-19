@@ -16,7 +16,6 @@ namespace RhinoPlugin.Tests.Xunit
         static string rhinoDir;
         static string ghDir="";
         Rhino.Runtime.InProcess.RhinoCore _rhinoCore;
-        Grasshopper.Plugin.GH_RhinoScriptInterface pluginObject;
 
 
         public XunitTestFixture()
@@ -25,8 +24,6 @@ namespace RhinoPlugin.Tests.Xunit
             ghDir = Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\");
 
             Assert.True(System.IO.Directory.Exists(rhinoDir), String.Format("Rhino system dir not found: {0}", rhinoDir));
-
-            //rhinoAppDomain = RhinoLoadDomain.CreateDomain();
 
             // Make sure we are running the tests as 64x
             Assert.True(Environment.Is64BitProcess, "Tests must be run as x64");
@@ -69,7 +66,7 @@ namespace RhinoPlugin.Tests.Xunit
         [STAThread]
         public void StartGH()
         {
-            pluginObject = Rhino.RhinoApp.GetPlugInObject("Grasshopper.dll") as Grasshopper.Plugin.GH_RhinoScriptInterface;
+            var pluginObject = Rhino.RhinoApp.GetPlugInObject("Grasshopper.dll") as Grasshopper.Plugin.GH_RhinoScriptInterface;
             pluginObject.RunHeadless();
         }
 
