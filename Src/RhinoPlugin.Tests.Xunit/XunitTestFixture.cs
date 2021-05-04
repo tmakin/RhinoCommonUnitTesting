@@ -12,9 +12,9 @@ namespace RhinoPlugin.Tests.Xunit
     /// </summary>
     public class XunitTestFixture : IDisposable
     {
-        bool initialized = false;
-        static string rhinoDir;
-        Rhino.Runtime.InProcess.RhinoCore _rhinoCore;
+        private bool initialized = false;
+        private static string rhinoDir;
+        private Rhino.Runtime.InProcess.RhinoCore _rhinoCore;
 
         /// <summary>
         /// Empty Constuctor
@@ -60,12 +60,9 @@ namespace RhinoPlugin.Tests.Xunit
         }
 
         /// <summary>
-        /// Add Grasshopper.dll to the current up domain
+        /// Add Grasshopper.dll to the current Appdomain
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        private static Assembly ResolveGrasshopper(object sender, ResolveEventArgs args)
+        private Assembly ResolveGrasshopper(object sender, ResolveEventArgs args)
         {
             var name = args.Name;
 
