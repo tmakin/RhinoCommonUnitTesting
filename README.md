@@ -4,15 +4,15 @@
 Example of unit testing RhinoCommon from within the Visual Studio test runner on windows.
 
 ## Prerequisites
-Rhino WIP 7  
-https://www.rhino3d.com/download/rhino/wip
+Rhino 7  
+https://www.rhino3d.com/download/Rhino/7.0
 
-Visual Studio 2017  
+Visual Studio 2019
 https://www.visualstudio.com/downloads/
 
 ## Test Framework
-For simplicitiy this project uses the defualt MS Unit framework,
-but the principles wouuld be easily transferable to other frameworks such as NUnit or XUnit.
+This project provides examples for XUnit and MS Test,
+but the principles would be easily transferable to other frameworks if needs.
 
 ## How to Run
 - Build the solution
