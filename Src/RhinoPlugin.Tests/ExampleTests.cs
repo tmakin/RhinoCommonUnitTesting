@@ -61,7 +61,7 @@ namespace RhinoPluginTests
             var result = myBox.Boundingbox.Center;
 
             // Assert
-            Assert.IsInstanceOfType(result,typeof(Point3d));
+            Assert.IsInstanceOfType(result, typeof(Point3d));
         }
     }
 }

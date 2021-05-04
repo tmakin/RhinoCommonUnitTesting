@@ -32,7 +32,7 @@ namespace RhinoPluginTests
                 initialized = true;
                 context.WriteLine("Rhino.Inside init has started");
             }
-            
+
             // Ensure we are running the tests in x64
             Assert.IsTrue(Environment.Is64BitProcess, "Tests must be run as x64");
 
@@ -54,3 +54,4 @@ namespace RhinoPluginTests
         }
     }
 }
+
