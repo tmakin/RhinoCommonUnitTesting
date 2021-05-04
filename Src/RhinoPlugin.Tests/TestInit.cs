@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.IO;
+using System.Reflection;
 
 using Microsoft.Win32;
 
@@ -11,8 +13,9 @@ namespace RhinoPluginTests
     [TestClass]
     public static class TestInit
     {
-        static bool initialized = false;
-        static string rhinoDir;
+        private static bool initialized = false;
+        private static string rhinoDir;
+
 
         [AssemblyInitialize]
         public static void AssemblyInitialize(TestContext context)
@@ -42,6 +45,9 @@ namespace RhinoPluginTests
 
             // Start a headless rhino instance using Rhino.Inside
             StartRhino();
+
+            // We have to load grasshopper.dll on the current AppDomain manually for some reason
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveGrasshopper;
         }
 
         /// <summary>
@@ -51,6 +57,23 @@ namespace RhinoPluginTests
         public static void StartRhino()
         {
             var _rhinoCore = new Rhino.Runtime.InProcess.RhinoCore(null, Rhino.Runtime.InProcess.WindowStyle.NoWindow);
+        }
+
+
+        /// <summary>
+        /// Add Grasshopper.dll to the current Appdomain
+        /// </summary>
+        private static Assembly ResolveGrasshopper(object sender, ResolveEventArgs args)
+        {
+            var name = args.Name;
+
+            if (!name.StartsWith("Grasshopper"))
+            {
+                return null;
+            }
+
+            var path = Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\Grasshopper.dll");
+            return Assembly.LoadFrom(path);
         }
     }
 }
