@@ -1,11 +1,12 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Rhino.Geometry;
+using Grasshopper.Kernel.Types;
 
 namespace RhinoPluginTests
 {
     /// <summary>
-    /// Example test methods that invoke RhinoCommon
+    /// Example test methods that invoke RhinoCommon and Grasshopper
     /// </summary>
     [TestClass]
     public class ExampleTests
@@ -45,6 +46,22 @@ namespace RhinoPluginTests
             // Assert
             Assert.AreEqual(1, curves.Length, "Wrong curve count");
             Assert.AreEqual(2 * Math.PI * radius, curves[0].GetLength(), "Wrong curve length");
+        }
+
+        /// <summary>
+        /// Xunit Test to ensure Centroid of GH_Box outputs a GH_Point
+        /// </summary>
+        [TestMethod]
+        public void GHBox_Centroid_ReturnsGHPoint()
+        {
+            // Arrange
+            var myBox = new GH_Box(new Box());
+
+            // Act 
+            var result = myBox.Boundingbox.Center;
+
+            // Assert
+            Assert.IsInstanceOfType(result, typeof(Point3d));
         }
     }
 }
