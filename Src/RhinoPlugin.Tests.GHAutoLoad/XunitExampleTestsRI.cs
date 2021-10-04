@@ -6,7 +6,7 @@ using Grasshopper.Kernel.Types;
 using Xunit;
 
 
-namespace RhinoPlugin.Tests.RHInside
+namespace RhinoPlugin.Tests.GHAutoLoad
 {
     /// <summary>
     /// XUnit tests

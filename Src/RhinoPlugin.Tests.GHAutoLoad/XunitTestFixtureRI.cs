@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using Xunit;
 
-namespace RhinoPlugin.Tests.RHInside
+namespace RhinoPlugin.Tests.GHAutoLoad
 {
 
     /// <summary>

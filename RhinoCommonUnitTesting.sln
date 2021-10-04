@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RhinoPlugin.Tests.Xunit", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RhinoPlugin.Tests", "Src\RhinoPlugin.Tests\RhinoPlugin.Tests.csproj", "{5F877072-8EA6-4CE3-9A6B-6CF201E3CB73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RhinoPlugin.Tests.RHInside", "Src\RhinoPlugin.Tests.RHInside\RhinoPlugin.Tests.RHInside.csproj", "{ACE64814-311F-4B9B-9DFE-31AE9A9030E3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RhinoPlugin.Tests.GHAutoLoad", "Src\RhinoPlugin.Tests.GHAutoLoad\RhinoPlugin.Tests.GHAutoLoad.csproj", "{ACE64814-311F-4B9B-9DFE-31AE9A9030E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
