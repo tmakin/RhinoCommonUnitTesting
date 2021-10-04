@@ -60,19 +60,29 @@ namespace RhinoPlugin.Tests.Xunit
         }
 
         /// <summary>
-        /// Add Grasshopper.dll to the current Appdomain
+        /// Add Grasshopper.dll and GH_IO to the current Appdomain
         /// </summary>
         private Assembly ResolveGrasshopper(object sender, ResolveEventArgs args)
         {
             var name = args.Name;
 
-            if (!name.StartsWith("Grasshopper"))
+            if (name.StartsWith("Grasshopper"))
+            {
+                var path = Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\Grasshopper.dll");
+                return Assembly.LoadFrom(path);
+            }
+
+            if (name.StartsWith("GH_IO"))
+            {
+                var path = Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\GH_IO.dll");
+                return Assembly.LoadFrom(path);
+            }
+
+            else
             {
                 return null;
             }
-
-            var path = Path.Combine(Path.GetFullPath(Path.Combine(rhinoDir, @"..\")), "Plug-ins\\Grasshopper\\Grasshopper.dll");
-            return Assembly.LoadFrom(path);
+            
         }
 
         /// <summary>
