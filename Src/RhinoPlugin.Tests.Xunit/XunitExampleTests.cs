@@ -18,7 +18,7 @@ namespace RhinoPlugin.Tests.Xunit
 
         public XunitExampleTests(XunitTestFixture fixture)
         {
-           fixture = _fixture;
+           _fixture = fixture;
         }
        
         [Fact]
